@@ -72,7 +72,7 @@ func (f EdgeFacing) At(p EdgePosition) Facing {
 }
 
 func (f EdgeFacing) Turn(p EdgePosition, t TurnOfCubelet) EdgeFacing {
-	return p.StateOf(f.At(p).Turn(t))
+	return p.Turn(t).StateOf(f.At(p).Turn(t))
 }
 
 type EdgePosition byte
@@ -82,6 +82,28 @@ const (
 	EdgeTopRight
 	EdgeFrontRight
 )
+
+var edgeRotationTable = [][]EdgePosition{
+	EdgeTopFront: {
+		TurnOfUpDown:    EdgeTopRight,
+		TurnOfFrontBack: EdgeFrontRight,
+		TurnOfRightLeft: EdgeTopFront,
+	},
+	EdgeTopRight: {
+		TurnOfUpDown:    EdgeTopFront,
+		TurnOfFrontBack: EdgeTopRight,
+		TurnOfRightLeft: EdgeFrontRight,
+	},
+	EdgeFrontRight: {
+		TurnOfUpDown:    EdgeFrontRight,
+		TurnOfFrontBack: EdgeTopFront,
+		TurnOfRightLeft: EdgeTopRight,
+	},
+}
+
+func (p EdgePosition) Turn(t TurnOfCubelet) EdgePosition {
+	return edgeRotationTable[p][t]
+}
 
 var edgeStateOfTable = [][]EdgeFacing{
 	EdgeTopFront: {

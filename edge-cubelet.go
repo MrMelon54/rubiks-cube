@@ -4,7 +4,7 @@ package rubiks_cube
 type EdgeCubelet byte
 
 func MakeEdgeCubelet(eType EdgeType, eFace EdgeFacing) EdgeCubelet {
-	return EdgeCubelet(eType&0b111) | EdgeCubelet(eFace&0b1)<<2
+	return EdgeCubelet(eType&0b1111) | EdgeCubelet(eFace&0b1)<<4
 }
 
 func (e EdgeCubelet) Piece() EdgeType {
@@ -32,7 +32,7 @@ func (e EdgeCubelet) GetColor(p EdgePosition, f Facing) Color {
 	case EdgeNormal:
 		return z.GetColor(r2)
 	case EdgeOpposite:
-		return z.GetColor(r2)
+		return z.GetColor((r2 + 1) % 2)
 	}
 	return UnknownColor
 }

@@ -1,0 +1,50 @@
+=== Test Rotate Right ===
+   www
+   www
+   www
+bbbooogggrrr
+bbbooogggrrr
+bbbooogggrrr
+   yyy
+   yyy
+   yyy
+# R
+   wwo
+   wwo
+   wwo
+bbbooygggwrr
+bbbooygggwrr
+bbbooygggwrr
+   yyr
+   yyr
+   yyr
+# R
+   wwy
+   wwy
+   wwy
+bbboorgggorr
+bbboorgggorr
+bbboorgggorr
+   yyw
+   yyw
+   yyw
+# R
+   wwr
+   wwr
+   wwr
+bbboowgggyrr
+bbboowgggyrr
+bbboowgggyrr
+   yyo
+   yyo
+   yyo
+# R
+   www
+   www
+   www
+bbbooogggrrr
+bbbooogggrrr
+bbbooogggrrr
+   yyy
+   yyy
+   yyy

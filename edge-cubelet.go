@@ -85,3 +85,17 @@ func (t EdgeType) String() string {
 	z := edgeColorTable[t]
 	return "Edge" + z[0].String() + z[1].String()
 }
+
+func DetectEdge(a, b Color) EdgeCubelet {
+	modeA := [2]Color{a, b}
+	modeB := [2]Color{b, a}
+	for i, j := range edgeColorTable {
+		switch j {
+		case modeA:
+			return MakeEdgeCubelet(EdgeType(i), EdgeNormal)
+		case modeB:
+			return MakeEdgeCubelet(EdgeType(i), EdgeOpposite)
+		}
+	}
+	return 255
+}

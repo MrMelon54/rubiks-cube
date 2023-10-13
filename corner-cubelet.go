@@ -87,3 +87,20 @@ func (t CornerType) String() string {
 	z := cornerColorTable[t]
 	return "Corner" + z[0].String() + z[1].String() + z[2].String()
 }
+
+func DetectCorner(up, front, right Color) CornerCubelet {
+	upFrontRight := [3]Color{up, front, right}
+	frontRightUp := [3]Color{front, right, up}
+	rightFrontUp := [3]Color{right, up, front}
+	for i, j := range cornerColorTable {
+		switch j {
+		case upFrontRight:
+			return MakeCornerCubelet(CornerType(i), FacingUpDown)
+		case frontRightUp:
+			return MakeCornerCubelet(CornerType(i), FacingFrontBack)
+		case rightFrontUp:
+			return MakeCornerCubelet(CornerType(i), FacingRightLeft)
+		}
+	}
+	return 255
+}

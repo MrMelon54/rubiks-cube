@@ -1,0 +1,64 @@
+package rubiks_cube
+
+import (
+	"bufio"
+	"errors"
+	"io"
+	"strings"
+)
+
+type CubeFaceData [6]FaceData
+
+type FaceData [9]Color
+
+var ErrInvalidCubeString = errors.New("invalid cube string")
+
+func ParseFaces(r io.Reader) (CubeFaceData, error) {
+	var faces CubeFaceData
+	scanner := bufio.NewScanner(r)
+	var s strings.Builder
+	s.Grow(13 * 9)
+	i := 0
+	for i <= 9 && scanner.Scan() {
+		line := scanner.Text()
+		switch {
+		case i < 3:
+			if !parseTopRegex.MatchString(line) {
+				return faces, ErrInvalidCubeString
+			}
+			faces[FaceUp][i*3] = ParseColor(line[3])
+			faces[FaceUp][i*3+1] = ParseColor(line[4])
+			faces[FaceUp][i*3+2] = ParseColor(line[5])
+		case i >= 3 && i < 6:
+			if !parseMiddleRegex.MatchString(line) {
+				return faces, ErrInvalidCubeString
+			}
+			j := i - 3
+			faces[FaceLeft][j*3] = ParseColor(line[0])
+			faces[FaceLeft][j*3+1] = ParseColor(line[1])
+			faces[FaceLeft][j*3+2] = ParseColor(line[2])
+			faces[FaceFront][j*3] = ParseColor(line[3])
+			faces[FaceFront][j*3+1] = ParseColor(line[4])
+			faces[FaceFront][j*3+2] = ParseColor(line[5])
+			faces[FaceRight][j*3] = ParseColor(line[6])
+			faces[FaceRight][j*3+1] = ParseColor(line[7])
+			faces[FaceRight][j*3+2] = ParseColor(line[8])
+			faces[FaceBack][j*3] = ParseColor(line[9])
+			faces[FaceBack][j*3+1] = ParseColor(line[10])
+			faces[FaceBack][j*3+2] = ParseColor(line[11])
+		case i >= 6 && i < 9:
+			if !parseTopRegex.MatchString(line) {
+				return faces, ErrInvalidCubeString
+			}
+			j := i - 6
+			faces[FaceDown][j*3] = ParseColor(line[3])
+			faces[FaceDown][j*3+1] = ParseColor(line[4])
+			faces[FaceDown][j*3+2] = ParseColor(line[5])
+		default:
+			return faces, ErrInvalidCubeString
+		}
+		s.WriteString(line)
+		i++
+	}
+	return faces, scanner.Err()
+}

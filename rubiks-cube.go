@@ -1,7 +1,15 @@
 package rubiks_cube
 
 import (
+	"errors"
+	"regexp"
 	"strings"
+)
+
+var (
+	parseTopRegex       = regexp.MustCompile("^ {3}[wyogrb]{3}( {6})?$")
+	parseMiddleRegex    = regexp.MustCompile("^[wyogrb]{12}$")
+	ErrInvalidCubeState = errors.New("invalid cube state")
 )
 
 // RubiksCube stores the state of a Rubik's Cube using the type and rotation of each corner and edge cubelet.
@@ -93,6 +101,12 @@ func (r RubiksCube) RotateRight(prime bool) RubiksCube {
 }
 
 func (r RubiksCube) RotateLeft(prime bool) RubiksCube {
+	cycleCorners(prime, TurnOfRightLeft, &r.LeftCorners[1], &r.LeftCorners[0], &r.LeftCorners[3], &r.LeftCorners[2])
+	cycleItems(prime, &r.LeftEdges[1], &r.LeftEdges[0], &r.LeftEdges[3], &r.LeftEdges[2])
+	turnEdge(&r.LeftEdges[0], EdgeTopRight, TurnOfRightLeft)
+	turnEdge(&r.LeftEdges[1], EdgeFrontRight, TurnOfRightLeft)
+	turnEdge(&r.LeftEdges[2], EdgeTopRight, TurnOfRightLeft)
+	turnEdge(&r.LeftEdges[3], EdgeFrontRight, TurnOfRightLeft)
 	return r
 }
 
@@ -127,7 +141,7 @@ func turnEdge(edge *EdgeCubelet, p EdgePosition, t TurnOfCubelet) {
 // Face returns the color of each cubelet on a specified face. face[4] will
 // always be equal to c.
 //
-// The face will be returned as [9]Color where indexes 0, 1, 2 is the first row
+// The face will be returned as FaceData where indexes 0, 1, 2 is the first row
 // of the face following the rotation display in the diagram below.
 //
 // . . . u u u . . . . . .
@@ -139,8 +153,8 @@ func turnEdge(edge *EdgeCubelet, p EdgePosition, t TurnOfCubelet) {
 // . . . d d d . . . . . .
 // . . . d d d . . . . . .
 // . . . d d d . . . . . .
-func (r RubiksCube) Face(f Face) (face [9]Color) {
-	face = [9]Color{255, 255, 255, 255, 255, 255, 255, 255, 255}
+func (r RubiksCube) Face(f Face) (face FaceData) {
+	face = FaceData{255, 255, 255, 255, 255, 255, 255, 255, 255}
 	switch f {
 	case FaceUp:
 		face[0] = r.LeftCorners[1].GetColor(FacingUpDown)
@@ -208,7 +222,7 @@ func (r RubiksCube) Face(f Face) (face [9]Color) {
 }
 
 func (r RubiksCube) String() string {
-	var z [6][9]Color
+	var z CubeFaceData
 	for i := 0; i < 6; i++ {
 		z[i] = r.Face(Face(i))
 	}

@@ -3,8 +3,14 @@ package rubiks_cube
 import (
 	"bufio"
 	"errors"
-	"io"
+	"fmt"
+	"regexp"
 	"strings"
+)
+
+var (
+	parseTopRegex    = regexp.MustCompile("^ {3}[wyogrb]{3}( {6})?$")
+	parseMiddleRegex = regexp.MustCompile("^[wyogrb]{12}$")
 )
 
 type CubeFaceData [6]FaceData
@@ -13,13 +19,13 @@ type FaceData [9]Color
 
 var ErrInvalidCubeString = errors.New("invalid cube string")
 
-func ParseFaces(r io.Reader) (CubeFaceData, error) {
+func ParseFaces(v string) (CubeFaceData, error) {
 	var faces CubeFaceData
-	scanner := bufio.NewScanner(r)
-	var s strings.Builder
-	s.Grow(13 * 9)
+
+	scanner := bufio.NewScanner(strings.NewReader(v))
 	i := 0
-	for i <= 9 && scanner.Scan() {
+	for i < 9 && scanner.Scan() {
+		fmt.Println(i)
 		line := scanner.Text()
 		switch {
 		case i < 3:
@@ -57,7 +63,6 @@ func ParseFaces(r io.Reader) (CubeFaceData, error) {
 		default:
 			return faces, ErrInvalidCubeString
 		}
-		s.WriteString(line)
 		i++
 	}
 	return faces, scanner.Err()

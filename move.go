@@ -3,6 +3,7 @@ package rubiks_cube
 import (
 	"bufio"
 	"errors"
+	"fmt"
 	"io"
 )
 
@@ -29,6 +30,14 @@ const (
 
 func (m Move) Reverse() Move {
 	return (m + 6) % 6
+}
+
+func (m Move) Prime() bool {
+	return m >= UpPrime
+}
+
+func (m Move) Valid() bool {
+	return m <= LeftPrime
 }
 
 type MoveScanner struct {
@@ -75,9 +84,16 @@ func (s *MoveScanner) Scan() bool {
 		s.err = err
 		return false
 	}
+	fmt.Println(s.currentMove, rune(readByte))
 	if readByte == '\'' {
 		s.currentMove = s.currentMove.Reverse()
+	} else {
+		s.err = s.b.UnreadByte()
+		if s.err != nil {
+			return false
+		}
 	}
+	fmt.Println(s.currentMove)
 	return true
 }
 

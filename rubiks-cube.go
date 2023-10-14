@@ -1,15 +1,7 @@
 package rubiks_cube
 
 import (
-	"errors"
-	"regexp"
 	"strings"
-)
-
-var (
-	parseTopRegex       = regexp.MustCompile("^ {3}[wyogrb]{3}( {6})?$")
-	parseMiddleRegex    = regexp.MustCompile("^[wyogrb]{12}$")
-	ErrInvalidCubeState = errors.New("invalid cube state")
 )
 
 // RubiksCube stores the state of a Rubik's Cube using the type and rotation of each corner and edge cubelet.
@@ -72,6 +64,24 @@ func NewSolvedCube() RubiksCube {
 			EdgeCubelet(EdgeYellowOrange),
 		},
 	}
+}
+
+func (r RubiksCube) Move(m Move) RubiksCube {
+	switch m {
+	case Up, UpPrime:
+		return r.RotateUp(m.Prime())
+	case Down, DownPrime:
+		return r.RotateDown(m.Prime())
+	case Front, FrontPrime:
+		return r.RotateFront(m.Prime())
+	case Back, BackPrime:
+		return r.RotateBack(m.Prime())
+	case Right, RightPrime:
+		return r.RotateRight(m.Prime())
+	case Left, LeftPrime:
+		return r.RotateLeft(m.Prime())
+	}
+	return r
 }
 
 func (r RubiksCube) RotateUp(prime bool) RubiksCube {

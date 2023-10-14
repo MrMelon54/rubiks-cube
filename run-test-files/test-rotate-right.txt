@@ -48,3 +48,54 @@ bbbooogggrrr
    yyy
    yyy
    yyy
+
+=== Test Rotate Right Prime ===
+   www
+   www
+   www
+bbbooogggrrr
+bbbooogggrrr
+bbbooogggrrr
+   yyy
+   yyy
+   yyy
+# R'
+   wwr
+   wwr
+   wwr
+bbboowgggyrr
+bbboowgggyrr
+bbboowgggyrr
+   yyo
+   yyo
+   yyo
+# R'
+   wwy
+   wwy
+   wwy
+bbboorgggorr
+bbboorgggorr
+bbboorgggorr
+   yyw
+   yyw
+   yyw
+# R'
+   wwo
+   wwo
+   wwo
+bbbooygggwrr
+bbbooygggwrr
+bbbooygggwrr
+   yyr
+   yyr
+   yyr
+# R'
+   www
+   www
+   www
+bbbooogggrrr
+bbbooogggrrr
+bbbooogggrrr
+   yyy
+   yyy
+   yyy

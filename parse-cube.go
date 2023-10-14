@@ -1,9 +1,13 @@
 package rubiks_cube
 
-import "io"
+import (
+	"errors"
+)
 
-func ParseCube(r io.Reader) (RubiksCube, error) {
-	faces, err := ParseFaces(r)
+var ErrInvalidCubeState = errors.New("invalid cube state")
+
+func ParseCube(v string) (RubiksCube, error) {
+	faces, err := ParseFaces(v)
 	if err != nil {
 		return RubiksCube{}, err
 	}

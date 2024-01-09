@@ -33,7 +33,7 @@ var rotationTable = [][]Facing{
 }
 
 func (f Facing) Turn(t TurnOfCubelet) Facing {
-	return rotationTable[f][t]
+	return rotationTable[f][t.Shortened()]
 }
 
 // EdgeFacing is the direction which the white/yellow side of an edge will be
@@ -48,9 +48,7 @@ const (
 	EdgeOpposite
 )
 
-func (f EdgeFacing) Valid() bool {
-	return f <= EdgeOpposite
-}
+func (f EdgeFacing) Valid() bool { return f <= EdgeOpposite }
 
 var edgeAtFacingTable = [][]Facing{
 	EdgeTopFront: {
@@ -102,7 +100,7 @@ var edgeRotationTable = [][]EdgePosition{
 }
 
 func (p EdgePosition) Turn(t TurnOfCubelet) EdgePosition {
-	return edgeRotationTable[p][t]
+	return edgeRotationTable[p][t.Shortened()]
 }
 
 var edgeStateOfTable = [][]EdgeFacing{
@@ -125,4 +123,72 @@ var edgeStateOfTable = [][]EdgeFacing{
 
 func (p EdgePosition) StateOf(f Facing) EdgeFacing {
 	return edgeStateOfTable[p][f]
+}
+
+type WingFacing byte
+
+const (
+	WingUp WingFacing = iota
+	WingDown
+	WingFront
+	WingBack
+	WingRight
+	WingLeft
+)
+
+func (w WingFacing) Valid() bool { return w <= WingLeft }
+
+var wingRotationTable = [][]WingFacing{
+	WingUp: {
+		TurnOfUp:    WingUp,
+		TurnOfDown:  WingUp,
+		TurnOfFront: WingRight,
+		TurnOfBack:  WingLeft,
+		TurnOfRight: WingBack,
+		TurnOfLeft:  WingFront,
+	},
+	WingDown: {
+		TurnOfUp:    WingUp,
+		TurnOfDown:  WingUp,
+		TurnOfFront: WingLeft,
+		TurnOfBack:  WingRight,
+		TurnOfRight: WingFront,
+		TurnOfLeft:  WingBack,
+	},
+	WingFront: {
+		TurnOfUp:    WingLeft,
+		TurnOfDown:  WingRight,
+		TurnOfFront: WingFront,
+		TurnOfBack:  WingFront,
+		TurnOfRight: WingUp,
+		TurnOfLeft:  WingDown,
+	},
+	WingBack: {
+		TurnOfUp:    WingRight,
+		TurnOfDown:  WingLeft,
+		TurnOfFront: WingBack,
+		TurnOfBack:  WingBack,
+		TurnOfRight: WingDown,
+		TurnOfLeft:  WingUp,
+	},
+	WingRight: {
+		TurnOfUp:    WingFront,
+		TurnOfDown:  WingBack,
+		TurnOfFront: WingDown,
+		TurnOfBack:  WingUp,
+		TurnOfRight: WingRight,
+		TurnOfLeft:  WingRight,
+	},
+	WingLeft: {
+		TurnOfUp:    WingBack,
+		TurnOfDown:  WingFront,
+		TurnOfFront: WingUp,
+		TurnOfBack:  WingDown,
+		TurnOfRight: WingLeft,
+		TurnOfLeft:  WingLeft,
+	},
+}
+
+func (w WingFacing) Turn(t TurnOfCubelet) WingFacing {
+	return wingRotationTable[w][t]
 }

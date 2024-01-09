@@ -6,7 +6,27 @@ package rubiks_cube
 type TurnOfCubelet byte
 
 const (
-	TurnOfUpDown TurnOfCubelet = iota
+	TurnOfUp TurnOfCubelet = iota
+	TurnOfDown
+	TurnOfFront
+	TurnOfBack
+	TurnOfRight
+	TurnOfLeft
+)
+
+func (t TurnOfCubelet) Shortened() TurnOfCubeletShort {
+	return TurnOfCubeletShort(t / 2)
+}
+
+func (t TurnOfCubelet) Opposite() TurnOfCubelet {
+	return t/2 + (1 - t%2)
+}
+
+// TurnOfCubeletShort defines the rotation of a cubelet relative to its current position but shortened
+type TurnOfCubeletShort byte
+
+const (
+	TurnOfUpDown TurnOfCubeletShort = iota
 	TurnOfFrontBack
 	TurnOfRightLeft
 )

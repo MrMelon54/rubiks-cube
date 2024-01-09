@@ -17,3 +17,16 @@ const (
 func (f Face) Valid() bool {
 	return f <= FaceLeft
 }
+
+var faceToFacing = []Facing{
+	FacingUpDown,
+	FacingUpDown,
+	FacingFrontBack,
+	FacingFrontBack,
+	FacingRightLeft,
+	FacingRightLeft,
+}
+
+func (f Face) Facing() Facing {
+	return faceToFacing[f]
+}

@@ -15,7 +15,7 @@ var (
 
 type CubeFaceData [6]FaceData
 
-type FaceData [9]Color
+type FaceData []Color
 
 var ErrInvalidCubeString = errors.New("invalid cube string")
 

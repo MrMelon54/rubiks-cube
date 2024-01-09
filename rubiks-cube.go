@@ -233,8 +233,6 @@ func (r RubiksCube) Face(f Face) (face FaceData) {
 	facing := f.Facing()
 	subN := r.N - 1
 	bottomRow := r.N * subN
-	leftEdgeIndex := r.EdgeIndex * 4
-	middleEdgeIndex := r.EdgeIndex * 8
 
 	// get indexes
 	cornerIdx := faceCornerIndexes[4*f : 4*f+3]
@@ -259,128 +257,8 @@ func (r RubiksCube) Face(f Face) (face FaceData) {
 	// find wing colors
 	for i := 0; i < subN; i++ {
 		for j := 0; j < subN; j++ {
-			// TODO: wing indexes
 			face[1+i+r.N*(j+1)] = wingIdx[i+subN*j].GetColor()
 		}
-	}
-
-	switch f {
-	case FaceUp:
-		// find corner colors
-		face[0] = r.Corners[4+1].GetColor(FacingUpDown)
-		face[subN] = r.Corners[1].GetColor(FacingUpDown)
-		face[bottomRow] = r.Corners[4].GetColor(FacingUpDown)
-		face[bottomRow+subN] = r.Corners[0].GetColor(FacingUpDown)
-
-		// find edge colors
-		for i := 0; i < r.EdgeIndex; i++ {
-			face[1+i] = r.Edges[middleEdgeIndex+r.WingIndex+i].GetColor(EdgeTopFront, FacingUpDown)
-			face[bottomRow+1+i] = r.Edges[middleEdgeIndex+i].GetColor(EdgeTopFront, FacingUpDown)
-			face[r.N+r.N*i] = r.Edges[leftEdgeIndex+i].GetColor(EdgeTopRight, FacingUpDown)
-			face[r.N+subN+r.N*i] = r.Edges[i].GetColor(EdgeTopRight, FacingUpDown)
-		}
-
-		// find wing colors
-		for i := 0; i < subN; i++ {
-			for j := 0; i < subN; i++ {
-				face[r.N+1+i+r.N*j] = r.Wings[i+j*subN].GetColor()
-			}
-		}
-	case FaceDown:
-		// find corner colors
-		face[0] = r.Corners[4+3].GetColor(FacingUpDown)
-		face[subN] = r.Corners[3].GetColor(FacingUpDown)
-		face[bottomRow] = r.Corners[4+2].GetColor(FacingUpDown)
-		face[bottomRow+subN] = r.Corners[2].GetColor(FacingUpDown)
-
-		// find edge colors
-		for i := 0; i < r.EdgeIndex; i++ {
-			face[1+i] = r.Edges[middleEdgeIndex+r.WingIndex*3+i].GetColor(EdgeTopFront, FacingUpDown)
-			face[bottomRow+1+i] = r.Edges[middleEdgeIndex+r.WingIndex*2+i].GetColor(EdgeTopFront, FacingUpDown)
-			face[r.N+r.N*i] = r.Edges[leftEdgeIndex+r.EdgeIndex*2+i].GetColor(EdgeTopRight, FacingUpDown)
-			face[r.N+subN+r.N*i] = r.Edges[r.EdgeIndex*2+i].GetColor(EdgeTopRight, FacingUpDown)
-		}
-
-		// find wing colors
-		for i := 0; i < subN; i++ {
-			for j := 0; j < subN; j++ {
-				face[r.N+1+i+r.N*j] = r.Wings[r.WingIndex+i+j*subN].GetColor()
-			}
-		}
-	case FaceFront:
-		// find corner colors
-		face[0] = r.Corners[4].GetColor(FacingFrontBack)
-		face[subN] = r.Corners[0].GetColor(FacingFrontBack)
-		face[bottomRow] = r.Corners[4+3].GetColor(FacingFrontBack)
-		face[bottomRow+subN] = r.Corners[3].GetColor(FacingFrontBack)
-
-		// find edge colors
-		for i := 0; i < r.EdgeIndex; i++ {
-			face[1+i] = r.Edges[middleEdgeIndex+i].GetColor(EdgeTopFront, FacingUpDown)
-			face[bottomRow+1+i] = r.Edges[middleEdgeIndex+r.WingIndex*3+i].GetColor(EdgeTopFront, FacingUpDown)
-			face[r.N+r.N*i] = r.Edges[leftEdgeIndex+r.EdgeIndex*3+i].GetColor(EdgeTopRight, FacingUpDown)
-			face[r.N+subN+r.N*i] = r.Edges[r.EdgeIndex*3+i].GetColor(EdgeTopRight, FacingUpDown)
-		}
-
-		// find wing colors
-		for i := 0; i < subN; i++ {
-			for j := 0; j < subN; j++ {
-				face[r.N+1+i+r.N*j] = r.Wings[r.WingIndex*2+i+j*subN].GetColor()
-			}
-		}
-	case FaceBack:
-		// find corner colors
-		face[0] = r.Corners[1].GetColor(FacingFrontBack)
-		face[subN] = r.Corners[4+1].GetColor(FacingFrontBack)
-		face[bottomRow] = r.Corners[2].GetColor(FacingFrontBack)
-		face[bottomRow+subN] = r.Corners[4+2].GetColor(FacingFrontBack)
-
-		// TODO: indexes
-
-		// find edge colors
-		for i := 0; i < r.EdgeIndex; i++ {
-			face[1+i] = r.Edges[middleEdgeIndex+i].GetColor(EdgeTopFront, FacingUpDown)
-			face[bottomRow+1+i] = r.Edges[middleEdgeIndex+r.WingIndex*3+i].GetColor(EdgeTopFront, FacingUpDown)
-			face[r.N+r.N*i] = r.Edges[leftEdgeIndex+r.EdgeIndex*3+i].GetColor(EdgeTopRight, FacingUpDown)
-			face[r.N+subN+r.N*i] = r.Edges[r.EdgeIndex*3+i].GetColor(EdgeTopRight, FacingUpDown)
-		}
-
-		// find wing colors
-		for i := 0; i < subN; i++ {
-			for j := 0; j < subN; j++ {
-				face[r.N+1+i+r.N*j] = r.Wings[r.WingIndex*2+i+j*subN].GetColor()
-			}
-		}
-
-		face[0] = r.RightCorners[1].GetColor(FacingFrontBack)
-		face[1] = r.MiddleEdges[1].GetColor(EdgeTopFront, FacingFrontBack)
-		face[2] = r.LeftCorners[1].GetColor(FacingFrontBack)
-		face[3] = r.RightEdges[1].GetColor(EdgeFrontRight, FacingFrontBack)
-		face[4] = Red
-		face[5] = r.LeftEdges[1].GetColor(EdgeFrontRight, FacingFrontBack)
-		face[6] = r.RightCorners[2].GetColor(FacingFrontBack)
-		face[7] = r.MiddleEdges[2].GetColor(EdgeTopFront, FacingFrontBack)
-		face[8] = r.LeftCorners[2].GetColor(FacingFrontBack)
-	case FaceRight:
-		face[0] = r.RightCorners[0].GetColor(FacingRightLeft)
-		face[1] = r.RightEdges[0].GetColor(EdgeTopRight, FacingRightLeft)
-		face[2] = r.RightCorners[1].GetColor(FacingRightLeft)
-		face[3] = r.RightEdges[3].GetColor(EdgeFrontRight, FacingRightLeft)
-		face[4] = Green
-		face[5] = r.RightEdges[1].GetColor(EdgeFrontRight, FacingRightLeft)
-		face[6] = r.RightCorners[3].GetColor(FacingRightLeft)
-		face[7] = r.RightEdges[2].GetColor(EdgeTopRight, FacingRightLeft)
-		face[8] = r.RightCorners[2].GetColor(FacingRightLeft)
-	case FaceLeft:
-		face[0] = r.LeftCorners[1].GetColor(FacingRightLeft)
-		face[1] = r.LeftEdges[3].GetColor(EdgeFrontRight, FacingRightLeft)
-		face[2] = r.LeftCorners[0].GetColor(FacingRightLeft)
-		face[3] = r.LeftEdges[0].GetColor(EdgeTopRight, FacingRightLeft)
-		face[4] = Blue
-		face[5] = r.LeftEdges[2].GetColor(EdgeTopRight, FacingRightLeft)
-		face[6] = r.LeftCorners[2].GetColor(FacingRightLeft)
-		face[7] = r.LeftEdges[1].GetColor(EdgeFrontRight, FacingRightLeft)
-		face[8] = r.LeftCorners[3].GetColor(FacingRightLeft)
 	}
 
 	return

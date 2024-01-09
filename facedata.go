@@ -21,6 +21,9 @@ var ErrInvalidCubeString = errors.New("invalid cube string")
 
 func ParseFaces(v string) (CubeFaceData, error) {
 	var faces CubeFaceData
+	for i := range faces {
+		faces[i] = make(FaceData, 3*3)
+	}
 
 	scanner := bufio.NewScanner(strings.NewReader(v))
 	i := 0

@@ -17,5 +17,5 @@ bbbooogggrrr
    yyy
 `)
 	assert.NoError(t, err)
-	assert.Equal(t, NewSolvedCube(), cube)
+	assert.Equal(t, NewSolvedCube(3), cube)
 }
